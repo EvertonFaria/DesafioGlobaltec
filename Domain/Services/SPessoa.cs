@@ -29,7 +29,7 @@ namespace DesafioGlobaltec.Domain.Services {
 
         public Resultado Incluir(Pessoa dadosPessoa) {
             Resultado resultado = DadosValidos(dadosPessoa);
-            resultado.Acao = "Inclusão de Cadastro";
+            resultado.Acao = "Cadastro realizado com sucesso!";
 
             if (resultado.Inconsistencias.Count == 0 && _context.Pessoas.Where(
                 p => p.CodigoPessoa == dadosPessoa.CodigoPessoa
@@ -49,7 +49,7 @@ namespace DesafioGlobaltec.Domain.Services {
 
         public Resultado Atualizar(Pessoa dadosPessoa) {
             Resultado resultado = DadosValidos(dadosPessoa);
-            resultado.Acao = "Atualização de Cadastro";
+            resultado.Acao = "Atualização de cadastro realizada com sucesso!";
 
             if (resultado.Inconsistencias.Count == 0) {
                 Pessoa pessoa = _context.Pessoas.Where(
@@ -58,11 +58,13 @@ namespace DesafioGlobaltec.Domain.Services {
 
                 if (pessoa == null) {
                     resultado.Inconsistencias.Add(
-                        "Cadastro não encontrado")
-                    ;
+                        "Cadastro não encontrado"
+                    );
                 } else {
                     pessoa.NomePessoa = dadosPessoa.NomePessoa;
-                    //pessoa.Preco = dadosPessoa.Preco;
+                    pessoa.CPFPessoas = dadosPessoa.CPFPessoas;
+                    pessoa.UFPessoa = dadosPessoa.UFPessoa;
+                    pessoa.DtNascimentoPessoa = dadosPessoa.DtNascimentoPessoa;
                     _context.SaveChanges();
                 }
             }
@@ -72,7 +74,7 @@ namespace DesafioGlobaltec.Domain.Services {
 
         public Resultado Excluir(string CodigoPessoa) {
             Resultado resultado = new Resultado();
-            resultado.Acao = "Exclusão de cadastro";
+            resultado.Acao = "Exclusão de cadastro realizada com sucesso!";
 
             Pessoa pessoa = Obter(CodigoPessoa);
             if (pessoa == null) {
@@ -106,11 +108,23 @@ namespace DesafioGlobaltec.Domain.Services {
                     );
                 }
 
-                //if (pessoa.Preco <= 0) {
-                //    resultado.Inconsistencias.Add(
-                //        "O Preço do Produto deve ser maior do que zero"
-                //    );
-                //}
+                if (String.IsNullOrWhiteSpace(pessoa.CPFPessoas)) {
+                    resultado.Inconsistencias.Add(
+                        "Preencha o CPF da pessoa"
+                    );
+                }
+
+                if (String.IsNullOrWhiteSpace(pessoa.UFPessoa)) {
+                    resultado.Inconsistencias.Add(
+                        "Preencha a UF da pessoa"
+                    );
+                }
+
+                if (String.IsNullOrWhiteSpace(pessoa.DtNascimentoPessoa)) {
+                    resultado.Inconsistencias.Add(
+                        "Preencha data de nascimento da pessoa"
+                    );
+                }
             }
 
             return resultado;
