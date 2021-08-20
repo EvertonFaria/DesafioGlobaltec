@@ -1,8 +1,14 @@
-﻿using System;
+﻿/*
+* Arquivo conténdo as validações e demais funções de manipulação dos cadastros de pessoas
+* Possui os métodos responsáveis pela inclusão, listagem, alteração e exclusão de registros
+* Tambémn realiza as validações dos dados informados para verificar a consistencia dos mesmos
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DesafioGlobaltec.Domain.Data;
 using DesafioGlobaltec.Domain.Models;
+using DesafioGlobaltec.Domain.Utils;
 
 namespace DesafioGlobaltec.Domain.Services {
     public class SPessoa {
@@ -12,7 +18,7 @@ namespace DesafioGlobaltec.Domain.Services {
             _context = context;
         }
 
-        public Pessoa Obter(string CodigoPessoa) {
+        public Pessoa ObterPorCodigo(string CodigoPessoa) {
             CodigoPessoa = CodigoPessoa?.Trim().ToUpper();
             if (!String.IsNullOrWhiteSpace(CodigoPessoa)) {
                 return _context.Pessoas.Where(
@@ -23,6 +29,17 @@ namespace DesafioGlobaltec.Domain.Services {
             }
         }
 
+        public Pessoa ObterPorUF(string ufPessoa) {
+            ufPessoa = ufPessoa?.Trim().ToUpper();
+            if (!String.IsNullOrWhiteSpace(ufPessoa)) {
+                return _context.Pessoas.Where(
+                    p => p.UFPessoa == ufPessoa
+                ).FirstOrDefault();
+            } else {
+                return null;
+            }
+        }        
+
         public IEnumerable<Pessoa> ListarTodos() {
             return _context.Pessoas.OrderBy(p => p.NomePessoa).ToList();
         }
@@ -30,6 +47,10 @@ namespace DesafioGlobaltec.Domain.Services {
         public Resultado Incluir(Pessoa dadosPessoa) {
             Resultado resultado = DadosValidos(dadosPessoa);
             resultado.Acao = "Cadastro realizado com sucesso!";
+            resultado.Pessoa.CodigoPessoa = dadosPessoa.CodigoPessoa;
+            resultado.Pessoa.NomePessoa = dadosPessoa.NomePessoa;
+            resultado.Pessoa.CPFPessoa = dadosPessoa.CPFPessoa;
+            resultado.Pessoa.UFPessoa = dadosPessoa.UFPessoa;
 
             if (resultado.Inconsistencias.Count == 0 && _context.Pessoas.Where(
                 p => p.CodigoPessoa == dadosPessoa.CodigoPessoa
@@ -42,6 +63,7 @@ namespace DesafioGlobaltec.Domain.Services {
             if (resultado.Inconsistencias.Count == 0) {
                 _context.Pessoas.Add(dadosPessoa);
                 _context.SaveChanges();
+
             }
 
             return resultado;
@@ -62,7 +84,7 @@ namespace DesafioGlobaltec.Domain.Services {
                     );
                 } else {
                     pessoa.NomePessoa = dadosPessoa.NomePessoa;
-                    pessoa.CPFPessoas = dadosPessoa.CPFPessoas;
+                    pessoa.CPFPessoa = dadosPessoa.CPFPessoa;
                     pessoa.UFPessoa = dadosPessoa.UFPessoa;
                     pessoa.DtNascimentoPessoa = dadosPessoa.DtNascimentoPessoa;
                     _context.SaveChanges();
@@ -76,7 +98,7 @@ namespace DesafioGlobaltec.Domain.Services {
             Resultado resultado = new Resultado();
             resultado.Acao = "Exclusão de cadastro realizada com sucesso!";
 
-            Pessoa pessoa = Obter(CodigoPessoa);
+            Pessoa pessoa = ObterPorCodigo(CodigoPessoa);
             if (pessoa == null) {
                 resultado.Inconsistencias.Add(
                     "Cadastro não encontrado"
@@ -108,9 +130,21 @@ namespace DesafioGlobaltec.Domain.Services {
                     );
                 }
 
-                if (String.IsNullOrWhiteSpace(pessoa.CPFPessoas)) {
+                if (String.IsNullOrWhiteSpace(pessoa.CPFPessoa)) {
                     resultado.Inconsistencias.Add(
                         "Preencha o CPF da pessoa"
+                    );
+                }
+
+                if (FormatCpf.SemFormatacao(pessoa.CPFPessoa).Length != 11 ) {
+                    resultado.Inconsistencias.Add(
+                        "CPF Inválido: Quantidade de digitos invalido!"
+                    );
+                }
+
+                if (!ValidaCPF.IsCpf(pessoa.CPFPessoa)) {
+                    resultado.Inconsistencias.Add(
+                        "CPF Inválido: Dígito verificador inconsistente!"
                     );
                 }
 

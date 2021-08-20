@@ -1,4 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+* Controle da rota de Login:
+*
+* Esse controler realizar a roteirização do login do usuario.
+* Além de utilizar o método post, que oculta os dados de login, utiliza a validação de credenciais, 
+* verificando o usuário e retornando o token de autenticação para as demais rotas
+*/
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using DesafioGlobaltec.Security;
 

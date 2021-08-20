@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+* Arquivo do Gerenciador de Acesso 
+* - Realiza a validação do usuario;
+* - Gera o token de autenticação;
+*/
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -27,20 +32,27 @@ namespace DesafioGlobaltec.Security {
 
         public bool ValidateCredentials(User user) {
             bool credenciaisValidas = false;
-            if (user != null && !String.IsNullOrWhiteSpace(user.UserID)) {
-                // Verifica a existência do usuário nas tabelas do
-                // ASP.NET Core Identity
-                var userIdentity = _userManager.FindByNameAsync(user.UserID).Result;
+            if (user != null && !String.IsNullOrWhiteSpace(user.Usuario)) {
+                /// <Sumary>
+                /// Verifica a existência do usuário nas tabelas do
+                /// ASP.NET Core Identity
+                /// </Sumary>
+                /// <param name="Usuario">string UserID sem formatação</param>
+                var userIdentity = _userManager.FindByNameAsync(user.Usuario).Result;
 
                 if (userIdentity != null) {
-                    // Efetua o login com base no Id do usuário e sua senha
+                    /// <Sumary>
+                    /// Efetua o login com base no Id do usuário e sua senha
+                    /// </Sumary>
                     var resultadoLogin = _signInManager
-                        .CheckPasswordSignInAsync(userIdentity, user.Password, false)
+                        .CheckPasswordSignInAsync(userIdentity, user.Senha, false)
                         .Result;
 
                     if (resultadoLogin.Succeeded) {
-                        // Verifica se o usuário em questão possui
-                        // a role Acesso-APIProdutos
+                        /// <Sumary>
+                        /// Verifica se o usuário em questão possui
+                        /// a role Acesso-APIPessoas
+                        /// </Sumary>
                         credenciaisValidas = _userManager.IsInRoleAsync(
                             userIdentity, 
                             Roles.ROLE_API_PESSOAS
@@ -55,7 +67,7 @@ namespace DesafioGlobaltec.Security {
         public Token GenerateToken(User user) {
             ClaimsIdentity identity = new ClaimsIdentity(
                 new GenericIdentity(
-                    user.UserID, 
+                    user.Usuario, 
                     "Login"
                 ),
                 new[] {
@@ -65,7 +77,7 @@ namespace DesafioGlobaltec.Security {
                     ),
                     new Claim(
                         JwtRegisteredClaimNames.UniqueName, 
-                        user.UserID
+                        user.Usuario
                     )
                 }
             );

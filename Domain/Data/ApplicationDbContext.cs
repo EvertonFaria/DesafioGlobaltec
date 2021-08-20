@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿/*
+* Realiza a inicialização do banco de dados que vai ser armazenado na memória
+*/
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using DesafioGlobaltec.Domain.Models;
 

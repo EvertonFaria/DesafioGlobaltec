@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+* Arquivo contendo o modelo do cadastro de pessoas.
+* Note que, já durante a modelagem dos dados, as mascaras e tipos são tratadas 
+* independentemente da forma como foram informadas no JSON na chamada da API
+*/
+using System;
+using DesafioGlobaltec.Domain.Utils;
 
 namespace DesafioGlobaltec.Domain.Models {
     public class Pessoa {
@@ -14,10 +20,10 @@ namespace DesafioGlobaltec.Domain.Models {
             set => _nomePessoa = value?.Trim().ToUpper();
         }
 
-        private string _cpfPessoas;
-        public string CPFPessoas {
-            get => _cpfPessoas;
-            set => _cpfPessoas = value?.Trim().ToUpper();
+        private string _cpfPessoa;
+        public string CPFPessoa {
+            get => FormatCpf.MascaraCPF(_cpfPessoa);
+            set => _cpfPessoa = FormatCpf.SemFormatacao(value?.Trim());
         }
 
         private string _ufPessoa;

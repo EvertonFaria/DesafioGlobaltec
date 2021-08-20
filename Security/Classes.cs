@@ -1,7 +1,10 @@
-﻿namespace DesafioGlobaltec.Security {
+﻿/*
+* Arquivo de classes utilizadas pelos serviços de autenticação e geração do token de segurança
+*/
+namespace DesafioGlobaltec.Security {
     public class User {
-        public string UserID { get; set; }
-        public string Password { get; set; }
+        public string Usuario { get; set; }
+        public string Senha { get; set; }
     }
 
     public static class Roles {
@@ -12,7 +15,7 @@
         public string Audience { get; set; }
         public string Issuer { get; set; }
         public int Seconds { get; set; }
-        public string Teste{get;set;}
+        public string Teste { get; set; }
     }
 
     public class Token {

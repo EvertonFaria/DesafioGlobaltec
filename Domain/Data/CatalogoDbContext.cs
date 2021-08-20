@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*
+* Catálodo do banco de dados que ficará armazenado em memória
+*/
+using Microsoft.EntityFrameworkCore;
 using DesafioGlobaltec.Domain.Models;
 
 namespace DesafioGlobaltec.Domain.Data {
     public class CatalogoDbContext : DbContext {
+        // Cria o contexto do banco e monta a estrutura de dados
         public CatalogoDbContext(
             DbContextOptions<CatalogoDbContext> options) : base(options) { 
                 //

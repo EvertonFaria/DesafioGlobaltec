@@ -1,4 +1,8 @@
-﻿using System.Security.Cryptography;
+﻿/*
+* Arquivo de configuração dos métodos de login. 
+* Define o provinder de criptografia (RsaSha256 = Chave de 256 bits)
+*/
+using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DesafioGlobaltec.Security {

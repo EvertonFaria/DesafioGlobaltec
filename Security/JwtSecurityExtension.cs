@@ -1,4 +1,7 @@
-﻿using System;
+﻿/*
+* Arquivo de implementação das regras de segurança utilizando Jwt para geração de um token JSON para Web
+*/
+using System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;

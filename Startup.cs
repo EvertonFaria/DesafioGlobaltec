@@ -106,8 +106,7 @@ namespace DesafioGlobaltec {
             }
 
             // Criação de estruturas, usuários e permissões
-            // na base do ASP.NET Identity Core (caso ainda não
-            // existam)
+            // na base do ASP.NET Identity Core (caso ainda não existam)
             new IdentityInitializer(
                 context, 
                 userManager, 

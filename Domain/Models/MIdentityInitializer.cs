@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+* Modelo que realiza a inicialização dos dados básicos de login
+* Veja que os dados dos usuários são carregados de forma fixa e que
+* é utilizada a biblioteca de identificação do proprio pacote Microsoft (UserManager).
+* Dessa forma, não preciso me preocupar com um modelo expecífico de usuario 
+* além de poder usar as politicas de segurança de senha (CORS), por exemplo, 
+* incluindo outras facilidades.
+*/
+using System;
 using Microsoft.AspNetCore.Identity;
 using DesafioGlobaltec.Domain.Data;
 using DesafioGlobaltec.Domain.Models;
